@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CompanyEntity } from "./persistence/company.entity";
 import { CompanySqliteRepository } from "./repository/company.sqlite.repository";
-import { CompanyController } from "./http/controllers/company.controller";
+import { CompanyController } from "./http-api/controllers/company.controller";
 import { RegisterCompanyUseCase } from "src/context/company/application/use-cases/register-company.use-case";
 
 @Module({

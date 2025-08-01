@@ -8,11 +8,11 @@ import {
   HttpStatus,
   Inject,
 } from "@nestjs/common";
-import { CreateCompanyDto } from "../../../../../../src/context/company/application/dto/create-company.dto";
-import { Company } from "../../../../../../src/context/company/domain/models/company.entity";
-import { CompanyRepository } from "../../../../../../src/context/company/domain/repository/company.repository";
+import { CreateCompanyDto } from "../../../application/dto/create-company.dto";
+import { Company } from "../../../domain/models/company.entity";
+import { CompanyRepository } from "../../../domain/repository/company.repository";
 import { ApiBody, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { RegisterCompanyUseCase } from "../../../../../../src/context/company/application/use-cases/register-company.use-case";
+import { RegisterCompanyUseCase } from "../../../application/use-cases/register-company.use-case";
 
 @Controller("companies")
 export class CompanyController {

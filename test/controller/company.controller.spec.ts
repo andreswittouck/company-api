@@ -1,5 +1,5 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { CompanyController } from "../../src/context/company/infrastructure/http/controllers/company.controller";
+import { CompanyController } from "../../src/context/company/infrastructure/http-api/controllers/company.controller";
 import { CompanyRepository } from "src/context/company/domain/repository/company.repository";
 import { CreateCompanyDto } from "src/context/company/application/dto/create-company.dto";
 import { Company } from "../../src/context/company/domain/models/company.entity";
