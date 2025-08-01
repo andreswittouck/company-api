@@ -11,7 +11,7 @@ export class Transfer {
   ) {}
 
   static create(props: {
-    id: string;
+    id?: string;
     sourceId: string;
     sourceType: string;
     amount: number;

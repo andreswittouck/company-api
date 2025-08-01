@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Inject } from "@nestjs/common";
 import { TransferRepository } from "../../../context/transfer/domain/repository/transfer.repository";
 import { CreateTransferDto } from "../../../context/transfer/application/dto/create-transfer.dto";
 import { Transfer } from "../../../context/transfer/domain/models/transfer.entity";
-import { GetCompaniesWithTransfersLastMonthUseCase } from "src/context/transfer/application/use-cases/get-companies-with-transfers-last-month.use-case";
+import { GetCompaniesWithTransfersLastMonthUseCase } from "../../../context/transfer/application/use-cases/get-companies-with-transfers-last-month.use-case";
 
 @Controller("transfers")
 export class TransferController {

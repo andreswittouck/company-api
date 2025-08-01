@@ -13,7 +13,7 @@ export class Company {
     id?: string;
     cuit: string;
     name: string;
-    joinDate: Date;
+    joinDate?: Date;
     type: "CORPORATE" | "PYME";
   }): Company {
     return new Company(

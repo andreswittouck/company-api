@@ -1,6 +1,6 @@
 export class CreateCompanyDto {
   cuit!: string;
   name!: string;
-  joinDate!: Date;
+  joinDate?: Date;
   type!: "CORPORATE" | "PYME";
 }

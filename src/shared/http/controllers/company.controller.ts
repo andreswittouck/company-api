@@ -36,7 +36,6 @@ export class CompanyController {
   }
   @Get("recently-joined")
   async findJoinedInLastMonth(): Promise<Company[]> {
-    console.log("entroo por el controller");
     return this.companyRepo.findJoinedInLastMonth();
   }
   @Get(":cuit")

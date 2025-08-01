@@ -1,5 +1,4 @@
 export class CreateTransferDto {
-  id!: string;
   sourceId!: string;
   sourceType!: string;
   amount!: number;
