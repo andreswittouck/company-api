@@ -2,22 +2,23 @@ import { TransferRepository } from "../../domain/repository/transfer.repository"
 import { CreateTransferDto } from "../dto/create-transfer.dto";
 import { Transfer } from "../../domain/models/transfer.entity";
 import { v4 as uuid } from "uuid";
-import { TransferSourceResolver } from "../../domain/repository/transfer-source-resolver.repository";
+import { Inject, NotFoundException } from "@nestjs/common";
+import { CompanyRepository } from "src/context/company/domain/repository/company.repository";
 
 export class RegisterTransferUseCase {
   constructor(
+    @Inject("TransferRepository")
     private readonly transferRepo: TransferRepository,
-    private readonly sourceResolver: TransferSourceResolver
+
+    @Inject("CompanyRepository")
+    private readonly companyRepo: CompanyRepository
   ) {}
 
   async execute(input: CreateTransferDto): Promise<void> {
-    const source = await this.sourceResolver.resolve(
-      input.sourceType,
-      input.sourceId
-    );
+    const source = await this.companyRepo.findById(input.sourceId);
 
     if (!source) {
-      throw new Error(
+      throw new NotFoundException(
         `Entity of type ${input.sourceType} with ID ${input.sourceId} not found`
       );
     }
@@ -29,7 +30,7 @@ export class RegisterTransferUseCase {
       input.amount,
       input.debitAccount,
       input.creditAccount,
-      input.date
+      input.date ?? new Date()
     );
 
     await this.transferRepo.save(transfer);

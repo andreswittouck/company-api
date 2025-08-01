@@ -1,12 +1,12 @@
 import { RegisterTransferUseCase } from "../../src/context/transfer/application/use-cases/register-transfer.use-case";
 import { TransferRepository } from "src/context/transfer/domain/repository/transfer.repository";
-import { TransferSourceResolver } from "src/context/transfer/domain/repository/transfer-source-resolver.repository";
+import { CompanyRepository } from "src/context/company/domain/repository/company.repository";
 import { CreateTransferDto } from "src/context/transfer/application/dto/create-transfer.dto";
 
 describe("RegisterTransferUseCase", () => {
   let useCase: RegisterTransferUseCase;
   let mockTransferRepo: jest.Mocked<TransferRepository>;
-  let mockSourceResolver: jest.Mocked<TransferSourceResolver>;
+  let mockCompanyRepo: jest.Mocked<CompanyRepository>;
 
   beforeEach(() => {
     mockTransferRepo = {
@@ -16,15 +16,19 @@ describe("RegisterTransferUseCase", () => {
       findBySourceId: jest.fn(),
     };
 
-    mockSourceResolver = {
-      resolve: jest.fn(),
+    mockCompanyRepo = {
+      save: jest.fn(),
+      findAll: jest.fn(),
+      findById: jest.fn(),
+      findByCuit: jest.fn(),
+      findJoinedInLastMonth: jest.fn(),
     };
 
-    useCase = new RegisterTransferUseCase(mockTransferRepo, mockSourceResolver);
+    useCase = new RegisterTransferUseCase(mockTransferRepo, mockCompanyRepo);
   });
 
-  it("should throw if source is not found", async () => {
-    mockSourceResolver.resolve.mockResolvedValue(null);
+  it("should throw if company is not found", async () => {
+    mockCompanyRepo.findById.mockResolvedValue(null);
 
     const dto: CreateTransferDto = {
       sourceId: "abc123",
@@ -41,10 +45,13 @@ describe("RegisterTransferUseCase", () => {
     expect(mockTransferRepo.save).not.toHaveBeenCalled();
   });
 
-  it("should create and save transfer if source exists", async () => {
-    mockSourceResolver.resolve.mockResolvedValue({
+  it("should create and save transfer if company exists", async () => {
+    mockCompanyRepo.findById.mockResolvedValue({
       id: "abc123",
-      name: "Mock Source",
+      cuit: "20304567891",
+      name: "Mock Company",
+      type: "PYME",
+      joinDate: new Date(),
     });
 
     const dto: CreateTransferDto = {
@@ -58,20 +65,16 @@ describe("RegisterTransferUseCase", () => {
 
     await useCase.execute(dto);
 
-    expect(mockSourceResolver.resolve).toHaveBeenCalledWith(
-      dto.sourceType,
-      dto.sourceId
-    );
-
+    expect(mockCompanyRepo.findById).toHaveBeenCalledWith(dto.sourceId);
     expect(mockTransferRepo.save).toHaveBeenCalledTimes(1);
-    const savedTransfer = mockTransferRepo.save.mock.calls[0][0];
 
+    const savedTransfer = mockTransferRepo.save.mock.calls[0][0];
     expect(savedTransfer.amount).toBe(dto.amount);
     expect(savedTransfer.debitAccount).toBe(dto.debitAccount);
     expect(savedTransfer.creditAccount).toBe(dto.creditAccount);
     expect(savedTransfer.sourceId).toBe(dto.sourceId);
     expect(savedTransfer.sourceType).toBe(dto.sourceType);
-    expect(savedTransfer.date.toISOString()).toBe(dto.date.toISOString());
+    expect(savedTransfer.date.toISOString()).toBe(dto.date?.toISOString());
     expect(savedTransfer.id).toBeDefined();
   });
 });

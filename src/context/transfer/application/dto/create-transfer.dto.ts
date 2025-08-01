@@ -4,5 +4,5 @@ export class CreateTransferDto {
   amount!: number;
   debitAccount!: string;
   creditAccount!: string;
-  date!: Date;
+  date?: Date;
 }

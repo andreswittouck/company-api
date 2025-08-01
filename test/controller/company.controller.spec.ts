@@ -1,13 +1,15 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { CompanyController } from "../../src/shared/http/controllers/company.controller";
+import { CompanyController } from "../../src/context/company/infrastructure/http/controllers/company.controller";
 import { CompanyRepository } from "src/context/company/domain/repository/company.repository";
 import { CreateCompanyDto } from "src/context/company/application/dto/create-company.dto";
 import { Company } from "../../src/context/company/domain/models/company.entity";
 import { HttpException, HttpStatus } from "@nestjs/common";
+import { RegisterCompanyUseCase } from "../../src/context/company/application/use-cases/register-company.use-case";
 
 describe("CompanyController", () => {
   let controller: CompanyController;
   let mockRepo: jest.Mocked<CompanyRepository>;
+  let mockRegisterCompanyUseCase: jest.Mocked<RegisterCompanyUseCase>;
 
   beforeEach(async () => {
     mockRepo = {
@@ -18,17 +20,25 @@ describe("CompanyController", () => {
       findJoinedInLastMonth: jest.fn(),
     };
 
+    mockRegisterCompanyUseCase = {
+      execute: jest.fn(),
+    } as any;
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CompanyController],
-      providers: [{ provide: "CompanyRepository", useValue: mockRepo }],
+      providers: [
+        { provide: "CompanyRepository", useValue: mockRepo },
+        {
+          provide: RegisterCompanyUseCase,
+          useValue: mockRegisterCompanyUseCase,
+        },
+      ],
     }).compile();
 
     controller = module.get<CompanyController>(CompanyController);
   });
 
   it("should create a new company", async () => {
-    mockRepo.findByCuit.mockResolvedValue(null);
-
     const dto: CreateCompanyDto = {
       cuit: "20304567891",
       name: "Test Company",
@@ -38,23 +48,7 @@ describe("CompanyController", () => {
 
     await controller.create(dto);
 
-    expect(mockRepo.save).toHaveBeenCalled();
-    expect(mockRepo.findByCuit).toHaveBeenCalledWith(dto.cuit);
-  });
-
-  it("should throw conflict if company exists", async () => {
-    mockRepo.findByCuit.mockResolvedValue({} as Company);
-
-    const dto: CreateCompanyDto = {
-      cuit: "20304567891",
-      name: "Test Company",
-      joinDate: new Date(),
-      type: "PYME",
-    };
-
-    await expect(controller.create(dto)).rejects.toThrow(
-      new HttpException("Company already exists", HttpStatus.CONFLICT)
-    );
+    expect(mockRegisterCompanyUseCase.execute).toHaveBeenCalledWith(dto);
   });
 
   it("should return all companies", async () => {

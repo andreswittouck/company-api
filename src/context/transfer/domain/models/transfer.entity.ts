@@ -17,7 +17,7 @@ export class Transfer {
     amount: number;
     debitAccount: string;
     creditAccount: string;
-    date: Date;
+    date?: Date;
   }): Transfer {
     return new Transfer(
       props.id ?? uuidv4(),
@@ -26,7 +26,7 @@ export class Transfer {
       props.amount,
       props.debitAccount,
       props.creditAccount,
-      props.date
+      props.date ?? new Date()
     );
   }
 

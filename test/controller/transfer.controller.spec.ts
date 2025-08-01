@@ -1,7 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { TransferController } from "../../src/shared/http/controllers/transfer.controller";
+import { TransferController } from "../../src/context/transfer/infrastructure/http-api/controllers/transfer.controller";
 import { TransferRepository } from "src/context/transfer/domain/repository/transfer.repository";
 import { GetCompaniesWithTransfersLastMonthUseCase } from "../../src/context/transfer/application/use-cases/get-companies-with-transfers-last-month.use-case";
+import { RegisterTransferUseCase } from "../../src/context/transfer/application/use-cases/register-transfer.use-case";
 import { CreateTransferDto } from "../../src/context/transfer/application/dto/create-transfer.dto";
 import { Transfer } from "../../src/context/transfer/domain/models/transfer.entity";
 import { Company } from "../../src/context/company/domain/models/company.entity";
@@ -9,7 +10,8 @@ import { Company } from "../../src/context/company/domain/models/company.entity"
 describe("TransferController", () => {
   let controller: TransferController;
   let mockTransferRepo: jest.Mocked<TransferRepository>;
-  let mockUseCase: jest.Mocked<GetCompaniesWithTransfersLastMonthUseCase>;
+  let mockGetCompaniesUseCase: jest.Mocked<GetCompaniesWithTransfersLastMonthUseCase>;
+  let mockRegisterTransferUseCase: jest.Mocked<RegisterTransferUseCase>;
 
   beforeEach(async () => {
     mockTransferRepo = {
@@ -17,9 +19,13 @@ describe("TransferController", () => {
       findAll: jest.fn(),
       findAfter: jest.fn(),
       findBySourceId: jest.fn(),
+    };
+
+    mockGetCompaniesUseCase = {
+      execute: jest.fn(),
     } as any;
 
-    mockUseCase = {
+    mockRegisterTransferUseCase = {
       execute: jest.fn(),
     } as any;
 
@@ -29,7 +35,11 @@ describe("TransferController", () => {
         { provide: "TransferRepository", useValue: mockTransferRepo },
         {
           provide: GetCompaniesWithTransfersLastMonthUseCase,
-          useValue: mockUseCase,
+          useValue: mockGetCompaniesUseCase,
+        },
+        {
+          provide: RegisterTransferUseCase,
+          useValue: mockRegisterTransferUseCase,
         },
       ],
     }).compile();
@@ -47,12 +57,10 @@ describe("TransferController", () => {
       date: new Date("2023-01-01"),
     };
 
-    await controller.register(dto);
+    const response = await controller.register(dto);
 
-    expect(mockTransferRepo.save).toHaveBeenCalled();
-    const savedTransfer = mockTransferRepo.save.mock.calls[0][0];
-    expect(savedTransfer.sourceId).toBe(dto.sourceId);
-    expect(savedTransfer.amount).toBe(dto.amount);
+    expect(mockRegisterTransferUseCase.execute).toHaveBeenCalledWith(dto);
+    expect(response).toEqual({ message: "Transfer registered successfully" });
   });
 
   it("should return all transfers", async () => {
@@ -82,7 +90,7 @@ describe("TransferController", () => {
     ];
     mockTransferRepo.findBySourceId.mockResolvedValue(transfers);
 
-    const result = await controller.getBySource("s3" as any); // simula param en Body
+    const result = await controller.getBySource("s3");
     expect(result).toBe(transfers);
     expect(mockTransferRepo.findBySourceId).toHaveBeenCalledWith("s3");
   });
@@ -97,10 +105,10 @@ describe("TransferController", () => {
         "PYME"
       ),
     ];
-    mockUseCase.execute.mockResolvedValue(companies);
+    mockGetCompaniesUseCase.execute.mockResolvedValue(companies);
 
     const result = await controller.getCompaniesWithTransfers();
     expect(result).toBe(companies);
-    expect(mockUseCase.execute).toHaveBeenCalled();
+    expect(mockGetCompaniesUseCase.execute).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
-import { CompanyModule } from "./shared/http/modules/company.module";
-import { TransferModule } from "./shared/http/modules/transfer.module";
+import { CompanyModule } from "./context/company/infrastructure/company.module";
+import { TransferModule } from "./context/transfer/infrastructure/transfer.module";
 import { AppDataSource } from "./database/data-sourse";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
