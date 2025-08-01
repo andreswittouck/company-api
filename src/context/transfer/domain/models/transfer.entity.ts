@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 export class Transfer {
   constructor(
     public readonly id: string,
@@ -19,7 +20,27 @@ export class Transfer {
     date: Date;
   }): Transfer {
     return new Transfer(
-      props.id ?? crypto.randomUUID(),
+      props.id ?? uuidv4(),
+      props.sourceId,
+      props.sourceType,
+      props.amount,
+      props.debitAccount,
+      props.creditAccount,
+      props.date
+    );
+  }
+
+  static fromPersistence(props: {
+    id: string;
+    sourceId: string;
+    sourceType: string;
+    amount: number;
+    debitAccount: string;
+    creditAccount: string;
+    date: Date;
+  }): Transfer {
+    return new Transfer(
+      props.id,
       props.sourceId,
       props.sourceType,
       props.amount,

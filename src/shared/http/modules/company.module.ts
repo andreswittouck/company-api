@@ -3,8 +3,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { CompanyEntity } from "../../../context/company/infrastructure/persistence/company.entity";
 import { CompanySqliteRepository } from "../../../context/company/infrastructure/repository/company.sqlite.repository";
-import { CompanyRepository } from "../../../context/company//domain/repository/company.repository";
-import { GetCompaniesJoinedLastMonthUseCase } from "../../../context/company//application/use-cases/get-companies-joined-last-month.use-case";
 import { CompanyController } from "../../../shared/http/controllers/company.controller";
 
 @Module({

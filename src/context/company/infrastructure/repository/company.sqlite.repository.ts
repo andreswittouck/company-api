@@ -53,7 +53,6 @@ export class CompanySqliteRepository implements CompanyRepository {
   async findJoinedInLastMonth(): Promise<Company[]> {
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-    console.log("entrooo");
     const entities = await this.ormRepo.find({
       where: {
         joinDate: MoreThan(oneMonthAgo),

@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export class Company {
   constructor(
     public readonly id: string,
@@ -15,21 +17,11 @@ export class Company {
     type: "CORPORATE" | "PYME";
   }): Company {
     return new Company(
-      dto.id ?? crypto.randomUUID(), // o uuid.v4()
+      dto.id ?? uuidv4(),
       dto.cuit,
       dto.name,
       dto.joinDate ?? new Date(),
       dto.type
-    );
-  }
-
-  static fromPersistence(entity: any): Company {
-    return new Company(
-      entity.id,
-      entity.cuit,
-      entity.name,
-      new Date(entity.joinDate),
-      entity.type
     );
   }
 }

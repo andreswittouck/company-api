@@ -11,7 +11,7 @@ export class RegisterCompanyUseCase {
       uuid(),
       input.cuit,
       input.name,
-      new Date(),
+      input.joinDate ?? new Date(),
       input.type
     );
 

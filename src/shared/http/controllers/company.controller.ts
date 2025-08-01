@@ -11,7 +11,6 @@ import {
 import { CreateCompanyDto } from "../../../context/company/application/dto/create-company.dto";
 import { Company } from "../../../context/company/domain/models/company.entity";
 import { CompanyRepository } from "../../../context/company/domain/repository/company.repository";
-import { GetCompaniesJoinedLastMonthUseCase } from "src/context/company/application/use-cases/get-companies-joined-last-month.use-case";
 
 @Controller("companies")
 export class CompanyController {

@@ -23,9 +23,9 @@ export class TransferSqliteRepository implements TransferRepository {
     return this.ormRepo.find({ where: { sourceId } });
   }
 
-  async findTransfersInLastMonth(): Promise<Transfer[]> {
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-    return this.ormRepo.find({ where: { date: MoreThan(oneMonthAgo) } });
+  async findAfter(date: Date): Promise<Transfer[]> {
+    return this.ormRepo.find({
+      where: { date: MoreThan(date) },
+    });
   }
 }

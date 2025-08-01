@@ -5,5 +5,5 @@ export interface TransferRepository {
   save(transfer: Transfer): Promise<void>;
   findAll(): Promise<Transfer[]>;
   findBySourceId(sourceId: string): Promise<Transfer[]>;
-  findTransfersInLastMonth(): Promise<Transfer[]>;
+  findAfter(date: Date): Promise<Transfer[]>;
 }

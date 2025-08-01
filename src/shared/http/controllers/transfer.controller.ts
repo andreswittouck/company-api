@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  HttpException,
-  HttpStatus,
-  Inject,
-} from "@nestjs/common";
+import { Controller, Get, Post, Body, Inject } from "@nestjs/common";
 import { TransferRepository } from "../../../context/transfer/domain/repository/transfer.repository";
 import { CreateTransferDto } from "../../../context/transfer/application/dto/create-transfer.dto";
 import { Transfer } from "../../../context/transfer/domain/models/transfer.entity";
@@ -33,7 +25,10 @@ export class TransferController {
 
   @Get("recent")
   async getTransfersInLastMonth(): Promise<Transfer[]> {
-    return this.transferRepo.findTransfersInLastMonth();
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+    return this.transferRepo.findAfter(oneMonthAgo);
   }
 
   @Get("by-source/:sourceId")
