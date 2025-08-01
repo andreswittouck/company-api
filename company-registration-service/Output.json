@@ -1,0 +1,20 @@
+{
+  "responses": [
+    {
+      "statusCode": 201,
+      "message": "Company registered successfully"
+    },
+    {
+      "statusCode": 400,
+      "message": "Missing or invalid required fields"
+    },
+    {
+      "statusCode": 409,
+      "message": "Company with this CUIT already exists"
+    },
+    {
+      "statusCode": 500,
+      "message": "Internal server error"
+    }
+  ]
+}

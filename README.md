@@ -46,8 +46,39 @@ npm run start:dev
 
 # 4. Ejecutar de test
 npm run test
+```
+
+C 🚀 Integración de Lambda en dataCompanyAPI
+Se integró una Lambda Function externa encargada de registrar empresas (PyME o Corporativas) en DynamoDB, invocada mediante API Gateway.
+
+📁 Cambios a realizar:
+En el caso de uso RegisterCompanyUseCase
+Se nesecita agregar la siguiente línea para invocar la Lambda luego del registro local:
+
+```bash
+await this.externalAdapter.registerCompany(company);
+```
+
+- Esto permite que cada vez que una empresa se registra en dataCompanyAPI, también se envíen sus datos a la Lambda.
+
+## Se creó la Lambda company-registration-service
+
+- Una función en AWS que:
+- Recibe datos vía POST /registrations.
+- Valida nombre, CUIT, tipo.
+- Evita duplicados por CUIT.
+- Almacena en la tabla DynamoDB Companies.
+
+📁 Proyecto separado ubicado en:
+company-registration-service/
+
+## Se creó el adapter para comunicar dataCompanyAPI con la Lambda
+
+📁 Archivo:
+src/context/company/infrastructure/adapters/external-company-lambda.adapter.ts
+
+Se agregó la URL de la Lambda al .env del proyecto:
 
 Autor
 Andrés Wittouck
 📧 andreswittouck@gmail.com
-```
