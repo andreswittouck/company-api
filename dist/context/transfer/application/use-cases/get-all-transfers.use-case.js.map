@@ -1,1 +1,0 @@
-{"version":3,"file":"get-all-transfers.use-case.js","sourceRoot":"","sources":["../../../../../src/context/transfer/application/use-cases/get-all-transfers.use-case.ts"],"names":[],"mappings":";;;AAGA,MAAa,sBAAsB;IACjC,YAA6B,YAAgC;QAAhC,iBAAY,GAAZ,YAAY,CAAoB;IAAG,CAAC;IAEjE,KAAK,CAAC,OAAO;QACX,OAAO,IAAI,CAAC,YAAY,CAAC,OAAO,EAAE,CAAC;IACrC,CAAC;CACF;AAND,wDAMC"}

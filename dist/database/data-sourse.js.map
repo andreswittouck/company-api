@@ -1,1 +1,0 @@
-{"version":3,"file":"data-sourse.js","sourceRoot":"","sources":["../../src/database/data-sourse.ts"],"names":[],"mappings":";;;AAAA,qCAAqC;AACrC,iGAA6F;AAC7F,oGAAgG;AAEnF,QAAA,aAAa,GAAG,IAAI,oBAAU,CAAC;IAC1C,IAAI,EAAE,QAAQ;IACd,QAAQ,EAAE,aAAa;IACvB,WAAW,EAAE,IAAI,EAAE,gBAAgB;IACnC,QAAQ,EAAE,CAAC,8BAAa,EAAE,gCAAc,CAAC;CAC1C,CAAC,CAAC"}
